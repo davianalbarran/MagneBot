@@ -6,7 +6,7 @@ module.exports = {
     "func": 
     
     (msg, args)=>{
-           getTeamData(args).then(res => {
+            getTeamData(args).then(res => {
             console.log(res)
             msg.channel.send(`
             ${res.nickname}
@@ -21,7 +21,7 @@ module.exports = {
          }
     }
 }
- async function getTeamData(team){
+async function getTeamData(team){
     const headers = {
         'X-TBA-Auth-Key': process.env.AUTH_KEY,
         'content-type': 'application/json'

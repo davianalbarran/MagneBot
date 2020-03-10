@@ -1,0 +1,25 @@
+{
+  "name": "magnebot",
+  "version": "1.0.0",
+  "description": "MagneGeek Scouter Bot",
+  "main": "MagneBot.js",
+  "dependencies": {
+    "discord.js": "^12.0.2",
+    "dotenv": "^8.2.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "npm start"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kostonkiddo10/MagneBot.git"
+  },
+  "author": "Davian Albarran",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kostonkiddo10/MagneBot/issues"
+  },
+  "homepage": "https://github.com/kostonkiddo10/MagneBot#readme"
+}

@@ -1,6 +1,6 @@
 require('dotenv').config({path: 'safety.env'});
-const teamQuery = require('./getTeamData.js')
-const fetch = require('node-fetch');
+const teamQuery = require('./getTeamData.js');
+const eventQuery = require('./getEventData');
 const Discord = require('discord.js')
 const magneBot = new Discord.Client();
 const TOKEN = process.env.TOKEN;
@@ -20,15 +20,27 @@ magneBot.on('ready', () => {
   magneBot.on('message', msg => {
      console.log('recieved a msg.')
      var args = msg.content.split(' ');
-   try{
-     switch(args[0]){
+    try {
+      switch(args[0]){
         case '!teamInfo': 
-        console.log('teaminfo')
-       teamQuery.teamInfo.func(msg, args[1]);
+          console.log('teaminfo')
+          teamQuery.teamInfo.func(msg, args[1]);
+        case '!simpEventInfo':
+          console.log('eventInfo');
+          eventQuery.eventInfo["event-simple"](msg, args[1], args[2]);
+        case '!rank':
+        case '!rankings':
+        case '!rankEventInfo':
+          console.log('rankInfo');
+          eventQuery.eventInfo["event-rankings"](msg, args[1], args[2]);
+        case '!teams':
+        case '!teamEvent':
+          console.log('getting teams at event');
+          eventQuery.eventInfo["event-teams"](msg, args[1], args[2]);
     }
-}
-catch(err){
+  }
+  catch(err){
     console.log(err)
     throw err;
-}
-  })
+  }
+});
