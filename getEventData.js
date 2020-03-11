@@ -86,14 +86,21 @@ async function getEventSimpData(year, eKey) {
     }
     try{
         const response = await fetch(`https://www.thebluealliance.com/api/v3/event/${year+eventKey}`, {headers: headers})
-        const json = await response.json();
-        if(await json.key===undefined){
-            throw new Error("Event cannot be found or is not in our database");
-        } 
-        return json;
+        .then(res => {
+            return res.json();
+        })
+        .then(event => {
+            if(event.rankings===undefined) {
+                throw new Error("Event cannot be found or is not in our databse!");
+            }
+            return event;
+        })
+        .catch(e => {
+            throw new Error(e);
+        });
+        return response;
     } catch(error){
         console.log(error);
-        throw error;
     }
 }
 
@@ -112,15 +119,22 @@ async function getEventRankData(year, eKey) {
         'content-type': 'application/json'
     }
     try{
-        const response =  await fetch(`https://www.thebluealliance.com/api/v3/event/${year+eventKey}/rankings`, {headers: headers});
-        const json = await response.json();
-        if(await json.rankings===undefined){
-            throw new Error("Event cannot be found or is not in our database");
-        } 
-        return json;
+        const response =  await fetch(`https://www.thebluealliance.com/api/v3/event/${year+eventKey}/rankings`, {headers: headers})
+        .then(res => {
+            return res.json();
+        })
+        .then(event => {
+            if(event.rankings===undefined) {
+                throw new Error("Event cannot be found or is not in our databse!");
+            }
+            return event;
+        })
+        .catch(e => {
+            throw new Error(e);
+        });
+        return response;
     } catch(error){
         console.log(error);
-        throw error;
     }
 }
 
@@ -140,13 +154,20 @@ async function getEventTeamData(year, eKey, limit) {
     }
     try{
         const response = await fetch(`https://www.thebluealliance.com/api/v3/event/${year+eventKey}/teams`, {headers: headers})
-        const json = await response.json();
-        if(await json.team_number===undefined){
-            throw new Error("Event cannot be found or is not in our database");
-        } 
-        return json;
+        .then(res => {
+            return res.json();
+        })
+        .then(event => {
+            if(event.rankings===undefined) {
+                throw new Error("Event cannot be found or is not in our databse!");
+            }
+            return event;
+        })
+        .catch(e => {
+            throw new Error(e);
+        });
+        return response;
     } catch(error){
         console.log(error);
-        throw error;
     }
 }
