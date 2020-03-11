@@ -1,5 +1,5 @@
 # Environment Stuff
-.env
+safety.env
 
 # Node Modules
 node_modules
