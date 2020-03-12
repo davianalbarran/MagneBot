@@ -189,7 +189,7 @@ async function getEventTeamData(year, eKey, limit) {
     try {
         console.log(year + eventKey);
         const response = await fetch(`https://www.thebluealliance.com/api/v3/event/${year + eventKey}/teams`, { headers: headers });
-        if (limit!==null) {
+        if (limit !== null) {
             if (response.status === 404) {
                 throw new Error();
             }
@@ -197,8 +197,8 @@ async function getEventTeamData(year, eKey, limit) {
                 let formattedRes = await response.json();
                 console.log(formattedRes);
                 let limRes = [];
-                for(let i=0;i<limit;i++) {
-                    limRes[i]= await formattedRes[i];
+                for (let i = 0; i < limit; i++) {
+                    limRes[i] = await formattedRes[i];
                     console.log(limRes);
                 }
                 return limRes;
