@@ -15,7 +15,7 @@ module.exports = {
             Team Number: ${res.team_number}
             State: ${res.state_prov}
             `);
-           }).catch(err => {
+           }).catch( () => {
                msg.channel.send("That team does not exist.")
            })
          }
