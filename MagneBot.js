@@ -3,7 +3,7 @@ const teamQuery = require('./getTeamData.js');
 const eventQuery = require('./getEventData');
 const Discord = require('discord.js')
 const magneBot = new Discord.Client();
-const TOKEN = process.env.DISCORD_TOKEN;
+const TOKEN = process.env.TOKEN;
 global.magneBot = magneBot;
 magneBot.login(TOKEN).catch(e => console.error(e));
 
