@@ -27,24 +27,25 @@ magneBot.on('message', msg => {
         teamQuery.teamInfo.func(msg, args[1]);
         break;
       case '!simpEventInfo':
+      case '!eventInfo':
+      case '!eventinfo':
+      case '!event':
         console.log('eventInfo');
         eventQuery.eventInfo["event-simple"](msg, args[1], args[2]);
         break;
-      case '!rank':
+      case '!ranking':
       case '!rankings':
       case '!rankEventInfo':
+      case '!rankInfo':
         console.log('rankInfo');
         eventQuery.eventInfo["event-rankings"](msg, args[1], args[2]);
         break;
       case '!teams':
       case '!teamEvent':
+      case '!teamevent':
+      case '!team':
         console.log('getting teams at event');
         eventQuery.eventInfo["event-teams"](msg, args[1], args[2]);
-        break;
-      case '!teamsLim':
-      case '!teamEventLim':
-        console.log('getting teams at event');
-        eventQuery.eventInfo["event-teams-lim"](msg, args[1], args[2], args[3]);
         break;
     }
   }

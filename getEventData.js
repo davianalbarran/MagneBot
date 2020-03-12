@@ -44,54 +44,17 @@ const eventRequest = {
             },
         "event-teams":
             (msg, argYear, argKey) => {
-                getEventTeamData(argYear, argKey)
+                getEventTeamData(msg, argYear, argKey)
                     .catch((e) => {
                         console.log(e);
-                        msg.channel.send("That event does not exist.")
+                        msg.channel.send(e.message);
                     })
                     .then(res => {
                         if (typeof res === Error) {
                             throw new Error(res);
-                        }
-                        let length = res.length;
-                        console.log(res);
-                        for (let i = 0; i < length; i++) {
-                            msg.channel.send(`
-                ${res[i].nickname}
-                ----------------------
-                    Week: ${res[i].week}
-                    Team #: ${res[i].team_number}
-                    City: ${res[i].city}
-                    State: ${res[i].state_prov}
-                `);
                         }
                     });
             },
-        "event-teams-lim":
-            (msg, argYear, argKey, argLim) => {
-                getEventTeamData(argYear, argKey, argLim)
-                    .catch((e) => {
-                        console.log(e);
-                        msg.channel.send("That event does not exist.")
-                    })
-                    .then(res => {
-                        if (typeof res === Error) {
-                            throw new Error(res);
-                        }
-                        console.log(res);
-                        let length = res.length;
-                        for (let i = 0; i < length; i++) {
-                            msg.channel.send(`
-                ${res[i].nickname}
-                ----------------------
-                    Week: ${res[i].week}
-                    Team #: ${res[i].team_number}
-                    City: ${res[i].city}
-                    State: ${res[i].state_prov}
-                `);
-                        }
-                    });
-            }
     },
     "event-keys": {
         "MountOlive": "njfla",
@@ -169,7 +132,7 @@ async function getEventRankData(year, eKey) {
     }
 }
 
-async function getEventTeamData(year, eKey, limit) {
+async function getEventTeamData(message, year, eKey) {
     let eventKey;
     switch (eKey) {
         case 'MountOlive':
@@ -186,33 +149,44 @@ async function getEventTeamData(year, eKey, limit) {
         'X-TBA-Auth-Key': process.env.AUTH_KEY,
         'content-type': 'application/json'
     }
+    const filter = (msg) => {
+        let pages = ['1', '2', '3'];
+        return pages.some((elem) => msg.content === elem);
+    };
+    const messCollect = message.channel.createMessageCollector(filter, { time: 60000 });
     try {
         console.log(year + eventKey);
         const response = await fetch(`https://www.thebluealliance.com/api/v3/event/${year + eventKey}/teams`, { headers: headers });
-        if (limit !== null) {
-            if (response.status === 404) {
-                throw new Error();
-            }
-            else {
-                let formattedRes = await response.json();
-                console.log(formattedRes);
-                let limRes = [];
-                for (let i = 0; i < limit; i++) {
-                    limRes[i] = await formattedRes[i];
-                    console.log(limRes);
-                }
-                return limRes;
-            }
+        if (response.status !== 200) {
+            throw new Error('Cannot find event at that year!');
         }
         else {
-            if (response.status === 404) {
-                throw new Error();
-            }
-            else {
-                let formattedRes = await response.json();
-                console.log(formattedRes);
-                return formattedRes;
-            }
+            let formattedRes = await response.json();
+            console.log(formattedRes);
+            messCollect.on('collect', (mess) => {
+                let messInt = (parseInt(mess.content) === 1) ? 0 : (parseInt(mess.content) === 2) ? 10 : 20;
+                for (let i = 0 + messInt; i < 10 + messInt; i++) {
+                    mess.channel.send(`
+                ${formattedRes[i].nickname}
+                ----------------------
+                    Team #: ${formattedRes[i].team_number}
+                    City: ${formattedRes[i].city}
+                    State: ${formattedRes[i].state_prov}
+                `);
+                }
+            });
+            messCollect.on('end', () => {
+                for (let i = 30; i < formattedRes.length; i++) {
+                    message.channel.send(`
+                ${formattedRes[i].nickname}
+                ----------------------
+                    Team #: ${formattedRes[i].team_number}
+                    City: ${formattedRes[i].city}
+                    State: ${formattedRes[i].state_prov}
+                `);
+                }
+                message.channel.send('Ending process...');
+            });
         }
     } catch (e) {
         console.log(e);
